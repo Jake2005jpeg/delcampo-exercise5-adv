@@ -1,0 +1,81 @@
+/* Home Page Styling */
+.home-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  padding: 20px;
+}
+
+.home-card {
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+  padding: 50px;
+  max-width: 600px;
+  width: 100%;
+  text-align: center;
+  animation: slideIn 0.3s ease-in-out;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.home-card h1 {
+  color: #333;
+  margin-bottom: 20px;
+  font-size: 32px;
+}
+
+.home-card p {
+  color: #666;
+  font-size: 16px;
+  margin-bottom: 30px;
+  line-height: 1.6;
+}
+
+.logout-btn {
+  padding: 12px 30px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.logout-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+}
+
+.logout-btn:active {
+  transform: translateY(0);
+}
+
+/* Responsive Design */
+@media (max-width: 480px) {
+  .home-card {
+    padding: 30px;
+  }
+
+  .home-card h1 {
+    font-size: 24px;
+  }
+
+  .home-card p {
+    font-size: 14px;
+  }
+}

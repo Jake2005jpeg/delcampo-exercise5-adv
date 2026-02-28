@@ -1,0 +1,10 @@
+{
+  "name": "adv-exercise5-delcampo",
+  "private": true,
+  "scripts": {
+    "start": "cd auth-flo && npm start",
+    "install": "cd auth-flo && npm install",
+    "build": "cd auth-flo && npm run build",
+    "test": "cd auth-flo && npm test"
+  }
+}
