@@ -1,6 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate, Link } from 'react-router-dom';
+import { createUserWithEmailAndPassword, signInWithPopup } from 'firebase/auth';
+import { auth, googleProvider } from '../firebase';
 
 interface RegisterFormInputs {
   email: string;
@@ -17,15 +19,39 @@ const Register: React.FC = () => {
     },
   });
   const navigate = useNavigate();
+  const [authError, setAuthError] = useState<string | null>(null);
   const password = watch('password');
 
-  const onSubmit = (data: RegisterFormInputs) => {
-    console.log('Register Data:', {
-      email: data.email,
-      password: data.password,
-    });
-    localStorage.setItem('registeredEmail', data.email);
-    navigate('/setup-account');
+  const onSubmit = async (data: RegisterFormInputs) => {
+    setAuthError(null);
+    try {
+      await createUserWithEmailAndPassword(auth, data.email, data.password);
+      localStorage.setItem('registeredEmail', data.email);
+      navigate('/setup-account');
+    } catch (error: any) {
+      setAuthError(error.message || 'Unable to create account. Please try again.');
+    }
+  };
+
+  const handleGoogleRegister = async () => {
+    setAuthError(null);
+    try {
+      const result = await signInWithPopup(auth, googleProvider);
+      const user = result.user;
+      const displayName = user.displayName || '';
+      const nameParts = displayName.split(' ');
+      const profileData = {
+        firstName: nameParts[0] || 'Google',
+        lastName: nameParts.slice(1).join(' ') || 'User',
+        profilePhoto: user.photoURL,
+        email: user.email,
+      };
+      localStorage.setItem('userProfile', JSON.stringify(profileData));
+      localStorage.setItem('registeredEmail', user.email || '');
+      navigate('/home');
+    } catch (error: any) {
+      setAuthError(error.message || 'Google sign up failed. Please try again.');
+    }
   };
 
   return (
@@ -89,6 +115,12 @@ const Register: React.FC = () => {
           Register
         </button>
       </form>
+
+      <button type="button" className="page-button" style={{ marginTop: '12px', backgroundColor: '#4285F4' }} onClick={handleGoogleRegister}>
+        Register with Google
+      </button>
+
+      {authError && <p style={{ color: 'red', marginTop: '12px' }}>{authError}</p>}
 
       <p className="page-link-row">
         Already have an account? <Link to="/login">Login here</Link>

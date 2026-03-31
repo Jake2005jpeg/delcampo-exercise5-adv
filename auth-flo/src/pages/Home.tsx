@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { auth } from '../firebase';
+import { onAuthStateChanged, signOut } from 'firebase/auth';
 
 interface UserProfile {
   firstName: string;
@@ -16,16 +18,36 @@ const Home: React.FC = () => {
     const storedProfile = localStorage.getItem('userProfile');
     if (storedProfile) {
       setProfile(JSON.parse(storedProfile));
-    } else {
-      // if user previously registered but never completed setup, send them there
-      const registeredEmail = localStorage.getItem('registeredEmail');
-      if (registeredEmail) {
-        navigate('/setup-account');
-      }
+      return;
     }
+
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      if (currentUser) {
+        const isGoogleUser = currentUser.providerData.some((p) => p.providerId === 'google.com');
+        if (isGoogleUser) {
+          const displayName = currentUser.displayName || '';
+          const nameParts = displayName.split(' ');
+          const profileData = {
+            firstName: nameParts[0] || 'Google',
+            lastName: nameParts.slice(1).join(' ') || 'User',
+            profilePhoto: currentUser.photoURL,
+            email: currentUser.email,
+          };
+          localStorage.setItem('userProfile', JSON.stringify(profileData));
+          setProfile(profileData);
+        } else {
+          navigate('/setup-account');
+        }
+      } else {
+        navigate('/login');
+      }
+    });
+
+    return unsubscribe;
   }, [navigate]);
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
+    await signOut(auth);
     localStorage.removeItem('userProfile');
     localStorage.removeItem('registeredEmail');
     navigate('/login');

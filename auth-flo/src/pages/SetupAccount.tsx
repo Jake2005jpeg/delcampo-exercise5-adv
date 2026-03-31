@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
+import { auth } from '../firebase';
 
 interface SetupAccountFormInputs {
   firstName: string;
@@ -34,7 +35,7 @@ const SetupAccount: React.FC = () => {
       firstName: data.firstName,
       lastName: data.lastName,
       profilePhoto: photoPreview,
-      email: localStorage.getItem('registeredEmail'),
+      email: auth.currentUser?.email || localStorage.getItem('registeredEmail'),
     };
     console.log('Setup Account Data:', profileData);
     localStorage.setItem('userProfile', JSON.stringify(profileData));

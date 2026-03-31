@@ -1,6 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate, Link } from 'react-router-dom';
+import { signInWithEmailAndPassword, signInWithPopup } from 'firebase/auth';
+import { auth, googleProvider } from '../firebase';
 
 interface LoginFormInputs {
   email: string;
@@ -15,24 +17,50 @@ const Login: React.FC = () => {
     },
   });
   const navigate = useNavigate();
+  const [authError, setAuthError] = useState<string | null>(null);
 
-  const onSubmit = (data: LoginFormInputs) => {
-    console.log('Login Data:', data);
-    // If a full profile exists, go to home. If user registered but hasn't completed setup,
-    // redirect them to the setup page so they can complete their profile.
-    const storedProfile = localStorage.getItem('userProfile');
-    if (storedProfile) {
+  const onSubmit = async (data: LoginFormInputs) => {
+    setAuthError(null);
+    try {
+      await signInWithEmailAndPassword(auth, data.email, data.password);
+
+      const storedProfile = localStorage.getItem('userProfile');
+      if (storedProfile) {
+        navigate('/home');
+        return;
+      }
+
+      const registeredEmail = localStorage.getItem('registeredEmail');
+      if (registeredEmail) {
+        navigate('/setup-account');
+        return;
+      }
+
       navigate('/home');
-      return;
+    } catch (error: any) {
+      setAuthError(error.message || 'Unable to log in. Please try again.');
     }
+  };
 
-    const registeredEmail = localStorage.getItem('registeredEmail');
-    if (registeredEmail) {
-      navigate('/setup-account');
-      return;
+  const handleGoogleLogin = async () => {
+    setAuthError(null);
+    try {
+      const result = await signInWithPopup(auth, googleProvider);
+      const user = result.user;
+      const displayName = user.displayName || '';
+      const nameParts = displayName.split(' ');
+      const profileData = {
+        firstName: nameParts[0] || 'Google',
+        lastName: nameParts.slice(1).join(' ') || 'User',
+        profilePhoto: user.photoURL,
+        email: user.email,
+      };
+      localStorage.setItem('userProfile', JSON.stringify(profileData));
+      localStorage.setItem('registeredEmail', user.email || '');
+      navigate('/home');
+    } catch (error: any) {
+      setAuthError(error.message || 'Google login failed. Please try again.');
     }
-
-    navigate('/home');
   };
 
   return (
@@ -79,6 +107,12 @@ const Login: React.FC = () => {
           Login
         </button>
       </form>
+
+      <button type="button" className="page-button" style={{ marginTop: '12px', backgroundColor: '#4285F4' }} onClick={handleGoogleLogin}>
+        Continue with Google
+      </button>
+
+      {authError && <p style={{ color: 'red', marginTop: '12px' }}>{authError}</p>}
 
       <p className="page-link-row">
         Don't have an account? <Link to="/register">Register here</Link>
