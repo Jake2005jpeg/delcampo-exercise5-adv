@@ -42,7 +42,7 @@ const SetupAccount: React.FC = () => {
   };
 
   return (
-    <div style={{ padding: '20px', maxWidth: '400px', margin: '50px auto' }}>
+    <div className="page-panel">
       <h1>Complete Your Profile</h1>
       <form onSubmit={handleSubmit(onSubmit)}>
         <div style={{ marginBottom: '15px' }}>
@@ -51,7 +51,7 @@ const SetupAccount: React.FC = () => {
             id="profilePhoto"
             type="file"
             accept="image/*"
-            style={{ width: '100%', padding: '8px', marginTop: '5px', marginBottom: '5px' }}
+            className="page-input"
             {...register('profilePhoto', {
               validate: (value) => {
                 if (value && value.length > 0) {
@@ -81,7 +81,7 @@ const SetupAccount: React.FC = () => {
             id="firstName"
             type="text"
             placeholder="Enter your first name"
-            style={{ width: '100%', padding: '8px', marginTop: '5px', marginBottom: '5px' }}
+            className="page-input"
             {...register('firstName', {
               required: 'First name is required',
               minLength: {
@@ -103,7 +103,7 @@ const SetupAccount: React.FC = () => {
             id="lastName"
             type="text"
             placeholder="Enter your last name"
-            style={{ width: '100%', padding: '8px', marginTop: '5px', marginBottom: '5px' }}
+            className="page-input"
             {...register('lastName', {
               required: 'Last name is required',
               minLength: {
@@ -119,7 +119,7 @@ const SetupAccount: React.FC = () => {
           {errors.lastName && <p style={{ color: 'red', margin: '5px 0' }}>{errors.lastName.message}</p>}
         </div>
 
-        <button type="submit" style={{ padding: '10px', width: '100%', cursor: 'pointer' }}>
+        <button type="submit" className="page-button">
           Complete Setup
         </button>
       </form>

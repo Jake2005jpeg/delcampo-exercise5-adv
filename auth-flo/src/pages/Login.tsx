@@ -36,7 +36,7 @@ const Login: React.FC = () => {
   };
 
   return (
-    <div style={{ padding: '20px', maxWidth: '400px', margin: '50px auto' }}>
+    <div className="page-panel">
       <h1>Login</h1>
       <form onSubmit={handleSubmit(onSubmit)}>
         <div style={{ marginBottom: '15px' }}>
@@ -45,7 +45,7 @@ const Login: React.FC = () => {
             id="email"
             type="email"
             placeholder="Enter your email"
-            style={{ width: '100%', padding: '8px', marginTop: '5px', marginBottom: '5px' }}
+            className="page-input"
             {...register('email', {
               required: 'Email is required',
               pattern: {
@@ -63,7 +63,7 @@ const Login: React.FC = () => {
             id="password"
             type="password"
             placeholder="Enter your password"
-            style={{ width: '100%', padding: '8px', marginTop: '5px', marginBottom: '5px' }}
+            className="page-input"
             {...register('password', {
               required: 'Password is required',
               minLength: {
@@ -75,12 +75,12 @@ const Login: React.FC = () => {
           {errors.password && <p style={{ color: 'red', margin: '5px 0' }}>{errors.password.message}</p>}
         </div>
 
-        <button type="submit" style={{ padding: '10px', width: '100%', cursor: 'pointer' }}>
+        <button type="submit" className="page-button">
           Login
         </button>
       </form>
 
-      <p style={{ marginTop: '20px' }}>
+      <p className="page-link-row">
         Don't have an account? <Link to="/register">Register here</Link>
       </p>
     </div>

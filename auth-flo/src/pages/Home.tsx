@@ -32,8 +32,8 @@ const Home: React.FC = () => {
   };
 
   return (
-    <div style={{ padding: '20px', maxWidth: '600px', margin: '50px auto', textAlign: 'center' }}>
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+    <div className="page-panel wide">
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', textAlign: 'center' }}>
         {profile && profile.profilePhoto && (
           <img
             src={profile.profilePhoto}
@@ -44,7 +44,7 @@ const Home: React.FC = () => {
         <h1>Welcome{profile ? `, ${profile.firstName} ${profile.lastName}` : ''}!</h1>
       </div>
       {profile ? (
-        <div style={{ marginTop: '30px', textAlign: 'left', border: '1px solid #ccc', padding: '20px', borderRadius: '5px' }}>
+        <div className="page-card">
           <h2>Your Profile</h2>
           {profile.profilePhoto && (
             <div style={{ marginBottom: '15px', textAlign: 'center' }}>
@@ -59,7 +59,7 @@ const Home: React.FC = () => {
         <p>You have successfully logged in or completed your account setup!</p>
       )}
 
-      <button onClick={handleLogout} style={{ padding: '10px 20px', cursor: 'pointer', marginTop: '20px' }}>
+      <button className="page-button inline" onClick={handleLogout}>
         Logout
       </button>
     </div>

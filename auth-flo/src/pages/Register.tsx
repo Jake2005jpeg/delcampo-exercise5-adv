@@ -29,7 +29,7 @@ const Register: React.FC = () => {
   };
 
   return (
-    <div style={{ padding: '20px', maxWidth: '400px', margin: '50px auto' }}>
+    <div className="page-panel">
       <h1>Register</h1>
       <form onSubmit={handleSubmit(onSubmit)}>
         <div style={{ marginBottom: '15px' }}>
@@ -38,7 +38,7 @@ const Register: React.FC = () => {
             id="email"
             type="email"
             placeholder="Enter your email"
-            style={{ width: '100%', padding: '8px', marginTop: '5px', marginBottom: '5px' }}
+            className="page-input"
             {...register('email', {
               required: 'Email is required',
               pattern: {
@@ -56,7 +56,7 @@ const Register: React.FC = () => {
             id="password"
             type="password"
             placeholder="Enter your password"
-            style={{ width: '100%', padding: '8px', marginTop: '5px', marginBottom: '5px' }}
+            className="page-input"
             {...register('password', {
               required: 'Password is required',
               minLength: {
@@ -74,7 +74,7 @@ const Register: React.FC = () => {
             id="confirmPassword"
             type="password"
             placeholder="Confirm your password"
-            style={{ width: '100%', padding: '8px', marginTop: '5px', marginBottom: '5px' }}
+            className="page-input"
             {...register('confirmPassword', {
               required: 'Please confirm your password',
               validate: (value) => value === password || 'Passwords do not match',
@@ -85,12 +85,12 @@ const Register: React.FC = () => {
           )}
         </div>
 
-        <button type="submit" style={{ padding: '10px', width: '100%', cursor: 'pointer' }}>
+        <button type="submit" className="page-button">
           Register
         </button>
       </form>
 
-      <p style={{ marginTop: '20px' }}>
+      <p className="page-link-row">
         Already have an account? <Link to="/login">Login here</Link>
       </p>
     </div>
